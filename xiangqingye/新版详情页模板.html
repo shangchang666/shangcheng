@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品详情页</title>
+    <style>
+        /* 基本样式 */
+        html,
+        body {
+            height: 100%;
+            /* 设置整体高度为100% */
+            width: 100%;
+            margin: 0;
+            /* 取消默认边距 */
+            font-family: Arial, sans-serif;
+            /* 设置字体 */
+            background-color: #F5DEB3;
+            /* 设置背景颜色 */
+        }
+
+        h1 {
+            color: #323232;
+            /* 这里设置为橙红色，您可以根据需要更改颜色 */
+            /* 上边距 */
+            margin-top: 10px;
+        }
+
+        h2 {
+            color: #8B4513;
+            /* 这里设置为橙红色，您可以根据需要更改颜色 */
+            /* 添加背景色 */
+            /* background-color: #4B0082; */
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            /* 阻止水平滚动 */
+            /* 图片居中 */
+            display: flex;
+            /* 设置为flex布局 */
+            flex-direction: column;
+            /* 设置flex方向为column */
+
+            align-items: center;
+            /* 水平居中 */
+        }
+
+
+
+        .main-image img {
+            max-width: 100%;
+            /* 设置最大宽度为100% */
+        }
+
+        .thumbnail-container {
+            display: flex;
+            /* 设置为flex布局 */
+            justify-content: center;
+            /* 水平居中 */
+            margin: 6px 0;
+            /* 设置外边距 */
+        }
+
+        .thumbnail-item img {
+            width: 60px;
+            /* 设置宽度为60px */
+            margin: 0 2px;
+            /* 设置外边距为0 2px */
+            cursor: pointer;
+            /* 设置鼠标指针 */
+        }
+
+
+        .title {
+            font-weight: bold;
+            /* 设置粗体 */
+            font-size: 1.5em;
+            /* 设置字体大小为1.5em */
+            text-align: center;
+            /* 水平居中 */
+            margin: 10px 0;
+            /* 设置外边距为10px 0 */
+            color: #323232;
+            /* 这里设置为红色，您可以根据需要更改颜色 */
+        }
+
+        .features {
+            margin-top: 10px;
+            /* 设置外边距为10px */
+            text-align: center;
+            /* 水平居中 */
+            background-color: #24231e;
+            /* 设置背景颜色 */
+            padding: 10px;
+            /* 设置内边距 */
+            border-radius: 5px;
+            /* 设置圆角 */
+            width: 100%;
+            /* 宽度为100% */
+        }
+
+        .features ul {
+            list-style: none;
+            /* 去掉列表符号 */
+            padding: 0;
+            /* 取消内边距 */
+            display: grid;
+            /* 设置为网格布局 */
+            grid-template-columns: repeat(2, 1fr);
+            /* 设置网格列数为2 */
+        }
+
+        .features li {
+            font-size: 1em;
+            /* 设置字体大小为1em */
+            color: #8B4513;
+            /* 这里设置为橙色，您可以根据需要更改颜色 */
+            padding: 5px;
+            /* 设置内边距 */
+        }
+
+        .image-container {
+            display: flex;
+            /* 设置为flex布局 */
+            flex-wrap: wrap;
+            /* 设置flex换行 */
+            justify-content: center;
+            /* 水平居中 */
+            width: 100%;
+            /* 设置宽度为100% */
+        }
+
+        .image-item {
+            margin: 2px;
+            /* 设置外边距 */
+            width: 48%
+                /* 设置宽度为40%，减去20px的外边距 */
+        }
+
+        .image-item img {
+            width: 100%;
+            height: auto;
+            /* 保持图片比例 */
+        }
+
+        .divider {
+            width: 100%;
+            /* 设置宽度为100% */
+            height: 2px;
+            /* 设置高度为2px */
+            background-color: #323232;
+            /* 设置背景颜色 */
+            margin: 20px 0;
+            /* 设置外边距为20px 0 */
+        }
+
+        .recommended-container {
+            display: flex;
+            /* 设置为flex布局 */
+            flex-wrap: wrap;
+            /* 设置flex换行 */
+            justify-content: space-between;
+            /* 两端对齐 */
+            width: 100%;
+        }
+
+        .recommended-item {
+            margin: 2px;
+            /* 设置外边距 */
+            width: calc(25% - 4px);
+            /* 设置宽度为25%，减去4px的外边距 */
+        }
+
+        .recommended-item img {
+            width: 100%;
+        }
+
+        .recommended-title {
+            width: 100%;
+            text-align: left;
+            /* 左对齐 */
+            font-size: 1.5em;
+            /* 设置字体大小为1.5em */
+            margin-top: 20px;
+            /* 设置外边距为20px */
+
+
+        }
+
+        .button-container {
+            display: flex;
+            /* 设置为flex布局 */
+            justify-content: center;
+            /* 水平居中 */
+            margin: 10px 0;
+            /* 设置外边距为10px 0 */
+        }
+
+        .button-container a {
+            margin: 0 5px;
+            /* 设置外边距为0 5px */
+            padding: 10px 15px;
+            /* 设置内边距为10px 15px */
+            font-size: 1em;
+            /* 设置字体大小为1em */
+            text-decoration: none;
+            /* 去掉下划线 */
+            border-radius: 5px;
+            /* 设置圆角 */
+            background-color: #007AFF;
+            /* 设置背景颜色 */
+            color: #000000;
+            /* 设置字体颜色 */
+            /* 字体加粗 */
+            font-weight: bold;
+            display: inline-block;
+            /* 设置为内联块 */
+        }
+
+        #priceModal {
+            /* 隐藏 */
+            display: none;
+            /* 设置弹出框的样式 */
+            align-items: center;
+            /* 居中 */
+            justify-content: center;
+            /* 居中 */
+            position: fixed;
+            /* 固定 */
+            top: 50%;
+            /* 距离顶部50% */
+            left: 50%;
+            /* 距离左边50% */
+            transform: translate(-50%, -50%);
+            /* 移动 */
+            background: rgb(228, 105, 5);
+            /* 设置背景颜色 */
+            width: 400px;
+            /* 设置宽度 */
+            height: 300px;
+            /* 设置高度 */
+            border-radius: 5px;
+            /* 圆角 */
+            box-shadow: 0 30px 30px #4CAF50;
+            /* 设置阴影 */
+            z-index: 1000;
+            /* 设置层叠顺序 */
+        }
+
+        .close-button {
+            position: absolute;
+            /* 绝对定位 */
+            top: 10px;
+            /* 距离顶部10px */
+            right: 10px;
+            /* 距离右边10px */
+            background: none;
+            /* 去掉背景 */
+            border: none;
+            /* 去掉边框 */
+            font-size: 1.5em;
+            /* 字体大小 */
+            cursor: pointer;
+            /* 鼠标指针 */
+        }
+
+        footer {
+            /* 设置底部样式 */
+
+            bottom: 0;
+            /* 距离底部0 */
+            width: 100%;
+            /* 宽度为100% */
+            background-color: #1c1322;
+            /* 设置背景颜色 */
+            padding: 10px;
+            /* 设置内边距 */
+            text-align: center;
+            /* 居中 */
+            margin-top: 20px;
+            /* 外边距为20px */
+            color: #8B4513;
+            /* 字体颜色 */
+            font-size: 0.8em;
+            /* 字体大小 */
+        }
+
+        footer p {
+            margin: 0;
+            /* 取消外边距 */
+            padding: 0;
+            /* 取消内边距 */
+            color: #8B4513
+                /* 字体颜色 */
+        }
+
+        footer a {
+            color: #884513;
+            /* 字体颜色 */
+            text-decoration: none;
+            /* 去掉下划线 */
+        }
+
+        .header {
+            display: flex;
+
+            align-items: center;
+            /* 垂直居中 */
+            width: 100%;
+            /* 设置宽度为100% */
+            padding: 0 10px;
+            /* 设置内边距 */
+            /* 上边距 */
+
+            color: #db630e;
+            /* 字体颜色 */
+            height: 50px;
+            /* 设置高度 */
+
+            top: 6;
+            /* 距离顶部0 */
+            z-index: 1000;
+            /* 设置层叠顺序 */
+        }
+
+        /* 评论部分样式 */
+        .review-section {
+            margin-top: 30px 10px;
+            color: #000000;
+
+            /* 加粗 */
+            font-weight: bold;
+
+        }
+
+        .dropdown-btn {
+            padding: 10px 20px;
+            background-color: #3b7ab4;
+            color: rgb(255, 255, 255);
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            /* 居中 */
+        }
+
+        .dropdown-btn:hover {
+            /* 鼠标悬停时背景颜色 */
+
+            background-color: #4a90e2;
+        }
+
+        .dropdown-content {
+            display: none;
+            margin-top: 10px;
+            border-top: 1px solid #c90d65;
+            padding-top: 10px;
+        }
+
+        .review-section {
+            margin: 30px 10px;
+            /* 上下边距为30px，左右边距为10px */
+            padding-left: 20px;
+            /* 左边距为20px，增加左侧间隙 */
+        }
+
+        .review {
+            margin-bottom: 15px;
+        }
+
+        .review img {
+            max-width: 100px;
+            margin-top: 5px;
+        }
+
+        .review-images {
+            display: flex;
+            /* 确保使用flex布局 */
+            justify-content: flex-start;
+            /* 启用左对齐 */
+            margin-top: 10px;
+            /* 设置顶部间距 */
+        }
+
+
+
+        .review-images img {
+            max-width: 30%;
+            /* 设置最大宽度，确保图片大小合适 */
+            margin-right: 10px;
+            /* 调整右边距，设置为更小的值，增加图片之间的接近度 */
+        }
+
+        .review-images img:last-child {
+            margin-right: 0;
+            /* 最后一个图片不需要右边距 */
+        }
+
+        @media (max-width: 600px) {
+            .your-class {
+                width: 100%;
+                /* 或根据需要调整 */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .your-class {
+                width: 100%;
+                /* 或根据需要调整 */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="button-container">
+                <a href="../index.html" class="button">返回首页</a>
+            </div>
+        </div>
+        <h1>商品详情</h1>
+        <div class="main-image">
+            <img id="mainImage" src="" alt="主图">
+        </div>
+        <div class="thumbnail-container" id="thumbnail-container"></div>
+        <div class="title" id="product-title">商品标题</div>
+
+
+
+
+        <div class="button-container">
+            <a href="客服页面.html" class="button">联系客服购买</a>
+            <a href="https://qm.qq.com/q/eMRqMovl4I" class="button">询价</a>
+            <a href="#" class="button" onclick="showPriceModal()">价格</a>
+        </div>
+
+        <div id="priceModal">
+            <div style="background:white; padding:20px; border-radius:5px; position: relative;">
+                <button onclick="closePriceModal()"
+                    style="position: absolute; top: 10px; right: 10px; font-size: 16px; color: red; background: none; border: none; cursor: pointer;">关闭</button>
+                <h2>选择颜色</h2>
+                <select id="colorSelect" onchange="updatePrice()">
+                    <option value="red">红色</option>
+                    <option value="blue">蓝色</option>
+                    <option value="green">绿色</option>
+                </select>
+                <div id="colorImage" style="margin: 10px 0;">
+                    <img id="selectedColorImage" src="" alt="颜色图片" style="max-width: 80%; height: auto;">
+                </div>
+                <div id="priceDisplay"></div>
+            </div>
+        </div>
+
+
+
+        <div class="features" id="features-container">
+            <ul>
+                <li>材质: 高级棉</li>
+                <li>品牌: 示例品牌</li>
+                <li>颜色: 红色</li>
+                <li>尺寸: M</li>
+                <li>重量: 500克</li>
+                <li>产地: 中国</li>
+                <li>洗涤方式: 机洗</li>
+                <li>适用场合: 休闲、运动</li>
+            </ul>
+        </div>
+
+        <div class="review-section" id="review-section">
+            <div id="default-review"></div> <!-- 默认展示的评论 -->
+            <button class="dropdown-btn" onclick="toggleDropdown()">更多评论</button>
+            <div class="dropdown-content" id="reviewDropdown" style="display: none;"></div>
+        </div>
+
+
+
+        <div class="image-container" id="image-container"></div>
+        <div class="divider"></div>
+        <h2 class="recommended-title">推荐商品</h2>
+        <div class="recommended-container" id="recommended-container"></div>
+
+        <footer>
+            <p>© TX购物商城 版权所有. </p>
+            <p>
+                <a href="隐私政策链接">隐私政策</a> |
+                <a href="用户协议链接">用户协议</a><br>
+
+                <a href="http://beian.miit.gov.cn/" target="_blank">京ICP备12020863号-1</a>
+            </p>
+        </footer>
+    </div>
+
+
+
+
+    <script>
+        const imageFolderPath = '../image/莆田爆款dunk北极狐灰白低帮男女情侣气垫鞋带滑板鞋同款休闲鞋/';
+        const totalImages = 22;
+
+        const productTitle = imageFolderPath.split('/')[2];
+        document.getElementById('product-title').innerText = productTitle;
+
+        const imageFolderPath1 = '../image/烂鞋子/'; // 指向包含用户晒单图片的子目录
+
+
+        // 所有可能的用户和评论数据
+        const allReviews = [
+            { username: "脚疼怪", comment: "不舒适：穿上后脚掌非常疼痛，走几步就想脱掉，完全不推荐。" },
+            { username: "买家秀", comment: "质量差：鞋底刚穿几天就开始磨损，感觉质量不靠谱，失望透顶。" },
+            { username: "鞋神在世", comment: "尺寸不合：买的尺码大了很多，穿上摇摇晃晃，走路都不稳。" },
+            { username: "没钱任性", comment: "设计丑陋：实物和图片相差太大，颜色看起来很廉价，穿出去真的没面子。" },
+            { username: "皮卡丘的鞋", comment: "异味严重：刚打开包装就有刺鼻的化学味，完全无法忍受，立刻退货。" },
+            { username: "天天踩坑", comment: "不透气：夏天穿得满脚都是汗，感觉像是在蒸桑拿，太热了。" },
+            { username: "走路带风", comment: "鞋带易断：鞋带用了几次就开始磨损，感觉随时可能断掉，真让人无奈。" },
+            { username: "不想走路", comment: "不防滑：穿在湿滑的地面上，简直没有任何抓地力，走几步就摔了一跤。" },
+            { username: "咸鱼翻身", comment: "不耐磨：只穿了几次，鞋头就磨出很大一个划痕，完全不值这个价。" },
+            { username: "高齐强", comment: "鞋带易断：鞋带用了几次就开始磨损，感觉随时可能断掉，真让人无奈，老莫，我想吃鱼了。" },
+            { username: "祁同伟", comment: "不防滑：穿在湿滑的地面上，简直没有任何抓地力，走几步就摔了一跤。" },
+            { username: "张裕廊", comment: "不耐磨：只穿了几次，鞋头就磨出很大一个划痕，完全不值这个价。" },
+            { username: "高齐盛", comment: "穿着累：长时间穿着脚踝部位磨得生疼，完全无法应对日常走路的需求。" },
+            { username: "姚波", comment: "TMD，退钱，这是鞋子？ " }
+        ];
+        // 随机选择一条评论并显示
+
+        function displaySingleReview() {
+            const randomReview = allReviews[Math.floor(Math.random() * allReviews.length)];
+            const singleReviewDiv = document.getElementById('singleReview');
+            singleReviewDiv.innerHTML = `<p>${randomReview.username}：${randomReview.comment}</p>`;
+        }
+        // 随机选择7到12条评论
+        function getRandomReviews() {
+            const randomCount = Math.floor(Math.random() * 6) + 7; // 随机生成7到12之间的数字
+            const shuffledReviews = allReviews.sort(() => 0.5 - Math.random()); // 洗牌
+            return shuffledReviews.slice(0, randomCount); // 取前randomCount条
+        }
+        // 获取随机评论并展示
+        function renderReviews() {
+            const randomReviews = getRandomReviews(); // 获取随机评论
+            const defaultReview = randomReviews[0]; // 默认展示第一条评论
+
+            // 显示默认评论
+            const defaultReviewDiv = document.getElementById('default-review');
+            defaultReviewDiv.innerHTML = `<p>${defaultReview.username}：${defaultReview.comment}</p>`;
+
+            // 为默认评论添加随机图片
+            const defaultReviewImagesDiv = document.createElement('div');
+            defaultReviewImagesDiv.className = 'review-images';
+
+            // 随机选择要显示的图片数量
+            const imageCount = Math.floor(Math.random() * 3) + 1; // 随机选择1到3张图片
+            const totalImageInFolder = 19; // 假设子目录下有10张图片
+
+            for (let i = 0; i < imageCount; i++) {
+                const randomImageIndex = Math.floor(Math.random() * totalImageInFolder) + 1; // 随机生成图片索引
+                const img = document.createElement('img');
+                img.src = `${imageFolderPath1}${randomImageIndex}.jpg`; // 构建随机图片路径
+                img.alt = "用户晒单";
+                defaultReviewImagesDiv.appendChild(img);
+            }
+
+            defaultReviewDiv.appendChild(defaultReviewImagesDiv); // 将图片添加到默认评论中
+            // 渲染剩余评论
+            const reviewDropdown = document.getElementById('reviewDropdown');
+            reviewDropdown.innerHTML = ''; // 清空当前评论
+            randomReviews.slice(1).forEach(review => {
+                const reviewDiv = document.createElement('div');
+                reviewDiv.className = 'review';
+                reviewDiv.innerHTML = `<p>${review.username}：${review.comment}</p>`;
+
+                const reviewImagesDiv = document.createElement('div');
+                reviewImagesDiv.className = 'review-images';
+
+                // 随机选择要显示的图片数量
+                const imageCount = Math.floor(Math.random() * 3) + 1; // 随机选择1到3张图片
+                const totalImageInFolder = 20; // 根据实际情况调整总图片数
+
+                for (let i = 0; i < imageCount; i++) {
+                    const randomImageIndex = Math.floor(Math.random() * totalImageInFolder) + 1; // 随机生成图片索引
+                    const img = document.createElement('img');
+                    img.src = `${imageFolderPath1}${randomImageIndex}.jpg`; // 构建随机图片路径
+                    img.alt = "用户晒单";
+                    reviewImagesDiv.appendChild(img);
+                }
+
+                reviewDiv.appendChild(reviewImagesDiv);
+                reviewDropdown.appendChild(reviewDiv);
+            });
+        }
+
+
+
+
+
+        // 修改 window.onload 函数
+        window.onload = function () {
+            renderImages();
+            renderRecommendedImages();
+            renderReviews(); // 渲染评论
+        };
+
+
+        function toggleDropdown() {
+            const dropdownContent = document.getElementById("reviewDropdown");
+            const moreButton = document.querySelector('.dropdown-btn'); // 获取“更多评论”按钮
+            const isDisplayed = dropdownContent.style.display === "block";
+
+            if (isDisplayed) {
+                dropdownContent.style.display = "none";
+                moreButton.style.display = "block"; // 显示按钮
+            } else {
+                dropdownContent.style.display = "block";
+                moreButton.style.display = "none"; // 隐藏按钮
+            }
+
+            // 点击其他区域隐藏评论
+            if (!isDisplayed) {
+                document.addEventListener('click', function hideDropdown(event) {
+                    if (!dropdownContent.contains(event.target) && !event.target.classList.contains('dropdown-btn')) {
+                        dropdownContent.style.display = "none";
+                        moreButton.style.display = "block"; // 显示按钮
+                        document.removeEventListener('click', hideDropdown); // 移除事件监听器
+                    }
+                });
+            }
+        }
+
+
+
+        function renderImages() {
+            const mainImage = document.getElementById('mainImage');
+            const thumbnailContainer = document.getElementById('thumbnail-container');
+            const imageContainer = document.getElementById('image-container');
+
+            mainImage.src = `${imageFolderPath}1.jpg`;
+            thumbnailContainer.innerHTML = '';
+            imageContainer.innerHTML = '';
+
+            for (let i = 1; i <= 4; i++) {
+                const thumbnailItem = document.createElement('div');
+                thumbnailItem.className = 'thumbnail-item';
+                thumbnailItem.innerHTML = `
+                <img src="${imageFolderPath}${i + 1}.jpg" alt="缩略图 ${i + 1}" onclick="changeMainImage(${i + 1})">
+            `;
+                thumbnailContainer.appendChild(thumbnailItem);
+            }
+
+            for (let i = 5; i <= totalImages - 5; i++) {
+                const imgElement = document.createElement('div');
+                imgElement.className = 'image-item';
+                imgElement.innerHTML = `<img src="${imageFolderPath}${i + 1}.jpg" alt="商品描述图 ${i + 1}">`;
+                imageContainer.appendChild(imgElement);
+            }
+        }
+
+        function changeMainImage(index) {
+            const mainImage = document.getElementById('mainImage');
+            mainImage.src = `${imageFolderPath}${index}.jpg`;
+        }
+        const recommendedLinks = [
+            '链接1',
+            '链接2',
+            '链接3',
+            '链接4'
+        ];
+        function renderRecommendedImages() {
+            const recommendedContainer = document.getElementById('recommended-container');
+            const startIndex = totalImages - 4;
+
+            for (let i = startIndex; i < totalImages; i++) {
+                const imgElement = document.createElement('div');
+                imgElement.className = 'recommended-item';
+                imgElement.innerHTML = `<a href="${recommendedLinks[i - (totalImages - 4)]}"><img src="${imageFolderPath}${i + 1}.jpg" alt="推荐商品图 ${i + 1}"></a>`;
+                recommendedContainer.appendChild(imgElement);
+            }
+        }
+
+        function showPriceModal() {
+            const modal = document.getElementById('priceModal');
+            modal.style.display = 'flex';
+            updatePrice();
+        }
+
+        function closePriceModal() {
+            document.getElementById('priceModal').style.display = 'none';
+        }
+
+        function updatePrice() {
+            const color = document.getElementById('colorSelect').value;
+            const priceDisplay = document.getElementById('priceDisplay');
+            const colorImage = document.getElementById('selectedColorImage');
+
+            let price, imageSrc;
+
+            switch (color) {
+                case 'red':
+                    price = '价格: ¥100';
+                    imageSrc = '../image/烂鞋子/4.jpg'; // 替换为红色图片路径
+                    break;
+                case 'blue':
+                    price = '价格: ¥120';
+                    imageSrc = '../image/烂鞋子/9.jpg'; // 替换为蓝色图片路径
+                    break;
+                case 'green':
+                    price = '价格: ¥110';
+                    imageSrc = '../image/烂鞋子/13.jpg'; // 替换为绿色图片路径
+                    break;
+            }
+
+            priceDisplay.innerText = price;
+            colorImage.src = imageSrc;
+        }
+    </script>
+
+
+
+</body>
+
+</html>
