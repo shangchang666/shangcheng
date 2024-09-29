@@ -141,39 +141,6 @@
         ];
 
 
-
-        function loadImages() {
-            imageGallery.innerHTML = '';
-
-            const startIndex = (currentPage - 1) * imagesPerPage;
-            const endIndex = Math.min(startIndex + imagesPerPage, totalImages);
-
-            for (let i = startIndex; i < endIndex; i++) {
-                const card = document.createElement('div');
-                card.classList.add('card');
-
-                const img = document.createElement('img');
-                img.src = `${imageFolderPath}${i + 1}.jpg`; // 假设图片命名为 image1.jpg, image2.jpg, ...
-
-                const title = links[i].replace('xiangqingye/', '').replace('.html', '');
-                const titleElement = document.createElement('h3');
-                titleElement.textContent = title;
-
-                const priceElement = document.createElement('p');
-                priceElement.textContent = prices[i]; // 获取对应的价格
-
-                card.addEventListener('click', () => {
-                    window.location.href = links[i];
-                });
-
-                card.appendChild(img);
-                card.appendChild(titleElement);
-                card.appendChild(priceElement);
-                imageGallery.appendChild(card);
-            }
-        }
-
-
         function updateButtons() {
             prevButton.disabled = currentPage === 1;
             nextButton.disabled = currentPage * imagesPerPage >= totalImages;
@@ -195,44 +162,50 @@
             }
         });
         // 搜索功能
-        function filterImages() {
+     function filterImages() {
             const searchTerm = searchInput.value.toLowerCase(); // 获取搜索词并转为小写
-            currentPage = 1; // 重置为第一页
+            currentPage = 1; // 重置到第一页
 
-            // 过滤出符合条件的卡片索引
-            const filteredLinks = links.filter(link => link.toLowerCase().includes(searchTerm));
-            const filteredPrices = prices.filter((_, index) => links[index].toLowerCase().includes(searchTerm));
+            // 过滤出符合搜索词的图片标题
+            const filteredIndexes = links.map((link, index) => {
+                const title = link.replace('xiangqingye/', '').replace('.html', '').toLowerCase();
+                return title.includes(searchTerm) ? index : -1;
+            }).filter(index => index !== -1);
 
-            // 更新总图片数
+            // 根据过滤后的索引，获取对应的链接和价格
+            const filteredLinks = filteredIndexes.map(index => links[index]);
+            const filteredPrices = filteredIndexes.map(index => prices[index]);
+
+            // 更新总图片数为过滤后的数量
             totalImages = filteredLinks.length;
 
             // 加载符合条件的图片
-            loadFilteredImages(filteredLinks, filteredPrices);
+            loadImages(filteredLinks, filteredPrices);
             updateButtons();
         }
 
-        function loadImages() {
-            imageGallery.innerHTML = '';
+        function loadImages(filteredLinks = links, filteredPrices = prices) {
+            imageGallery.innerHTML = ''; // 清空图片容器
 
             const startIndex = (currentPage - 1) * imagesPerPage;
-            const endIndex = Math.min(startIndex + imagesPerPage, totalImages);
+            const endIndex = Math.min(startIndex + imagesPerPage, filteredLinks.length);
 
             for (let i = startIndex; i < endIndex; i++) {
                 const card = document.createElement('div');
                 card.classList.add('card');
 
                 const img = document.createElement('img');
-                img.src = `${imageFolderPath}${i + 1}.jpg`;
+                img.src = `${imageFolderPath}${i + 1}.jpg`; // 根据图片路径
 
-                const title = links[i].replace('xiangqingye/', '').replace('.html', '');
+                const title = filteredLinks[i].replace('xiangqingye/', '').replace('.html', '');
                 const titleElement = document.createElement('h3');
                 titleElement.textContent = title;
 
                 const priceElement = document.createElement('p');
-                priceElement.textContent = prices[i];
+                priceElement.textContent = filteredPrices[i];
 
                 card.addEventListener('click', () => {
-                    window.open(links[i], '_blank'); // 新窗口打开链接
+                    window.location.href = filteredLinks[i];
                 });
 
                 card.appendChild(img);
