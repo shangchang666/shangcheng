@@ -11,7 +11,6 @@
         body {
             height: 100%;
             /* 设置整体高度为100% */
-            width: 100%;
             margin: 0;
             /* 取消默认边距 */
             font-family: Arial, sans-serif;
@@ -36,20 +35,20 @@
 
         .container {
             width: 100%;
+            /* 设置宽度为100% */
             height: 100%;
-            overflow-x: hidden;
-            /* 阻止水平滚动 */
-            /* 图片居中 */
+            /* 设置高度为100% */
+            background: rgb(#A52A2A);
+            /* 设置背景颜色 */
             display: flex;
             /* 设置为flex布局 */
             flex-direction: column;
             /* 设置flex方向为column */
-
             align-items: center;
-            /* 水平居中 */
+            /* 垂直居中 */
+            padding: 6px;
+            /* 设置内边距 */
         }
-
-
 
         .main-image img {
             max-width: 100%;
@@ -137,14 +136,12 @@
         .image-item {
             margin: 2px;
             /* 设置外边距 */
-            width: 48%
-                /* 设置宽度为40%，减去20px的外边距 */
+            width: calc(40% - 20px);
+            /* 设置宽度为40%，减去20px的外边距 */
         }
 
         .image-item img {
             width: 100%;
-            height: auto;
-            /* 保持图片比例 */
         }
 
         .divider {
@@ -326,93 +323,6 @@
             z-index: 1000;
             /* 设置层叠顺序 */
         }
-
-        /* 评论部分样式 */
-        .review-section {
-            margin-top: 30px 10px;
-            color: #000000;
-
-            /* 加粗 */
-            font-weight: bold;
-
-        }
-
-        .dropdown-btn {
-            padding: 10px 20px;
-            background-color: #3b7ab4;
-            color: rgb(255, 255, 255);
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            text-align: center;
-            /* 居中 */
-        }
-
-        .dropdown-btn:hover {
-            /* 鼠标悬停时背景颜色 */
-
-            background-color: #4a90e2;
-        }
-
-        .dropdown-content {
-            display: none;
-            margin-top: 10px;
-            border-top: 1px solid #c90d65;
-            padding-top: 10px;
-        }
-
-        .review-section {
-            margin: 30px 10px;
-            /* 上下边距为30px，左右边距为10px */
-            padding-left: 20px;
-            /* 左边距为20px，增加左侧间隙 */
-        }
-
-        .review {
-            margin-bottom: 15px;
-        }
-
-        .review img {
-            max-width: 100px;
-            margin-top: 5px;
-        }
-
-        .review-images {
-            display: flex;
-            /* 确保使用flex布局 */
-            justify-content: flex-start;
-            /* 启用左对齐 */
-            margin-top: 10px;
-            /* 设置顶部间距 */
-        }
-
-
-
-        .review-images img {
-            max-width: 30%;
-            /* 设置最大宽度，确保图片大小合适 */
-            margin-right: 10px;
-            /* 调整右边距，设置为更小的值，增加图片之间的接近度 */
-        }
-
-        .review-images img:last-child {
-            margin-right: 0;
-            /* 最后一个图片不需要右边距 */
-        }
-
-        @media (max-width: 600px) {
-            .your-class {
-                width: 100%;
-                /* 或根据需要调整 */
-            }
-        }
-
-        @media (max-width: 480px) {
-            .your-class {
-                width: 100%;
-                /* 或根据需要调整 */
-            }
-        }
     </style>
 </head>
 
@@ -431,9 +341,6 @@
         <div class="thumbnail-container" id="thumbnail-container"></div>
         <div class="title" id="product-title">商品标题</div>
 
-
-
-
         <div class="button-container">
             <a href="客服页面.html" class="button">联系客服购买</a>
             <a href="https://qm.qq.com/q/eMRqMovl4I" class="button">询价</a>
@@ -446,9 +353,8 @@
                     style="position: absolute; top: 10px; right: 10px; font-size: 16px; color: red; background: none; border: none; cursor: pointer;">关闭</button>
                 <h2>选择颜色</h2>
                 <select id="colorSelect" onchange="updatePrice()">
-                    <option value="red">红色</option>
-                    <option value="blue">蓝色</option>
-                    <option value="green">绿色</option>
+                    <option value="red">浅绿色</option>
+                    <option value="red">其他颜色请咨询客服</option>>
                 </select>
                 <div id="colorImage" style="margin: 10px 0;">
                     <img id="selectedColorImage" src="" alt="颜色图片" style="max-width: 80%; height: auto;">
@@ -457,28 +363,18 @@
             </div>
         </div>
 
-
-
         <div class="features" id="features-container">
             <ul>
-                <li>材质: 高级棉</li>
-                <li>品牌: 示例品牌</li>
-                <li>颜色: 红色</li>
-                <li>尺寸: M</li>
+                <li>材质: 天然橡胶</li>
+                <li>品牌: PUMA</li>
+                <li>颜色: 浅绿色及其他</li>
+                <li>尺寸: 36~44</li>
                 <li>重量: 500克</li>
                 <li>产地: 中国</li>
-                <li>洗涤方式: 机洗</li>
-                <li>适用场合: 休闲、运动</li>
+                <li>洗涤方式: 机洗.手洗</li>
+                <li>适用场合: 休闲、运动.潮流</li>
             </ul>
         </div>
-
-        <div class="review-section" id="review-section">
-            <div id="default-review"></div> <!-- 默认展示的评论 -->
-            <button class="dropdown-btn" onclick="toggleDropdown()">更多评论</button>
-            <div class="dropdown-content" id="reviewDropdown" style="display: none;"></div>
-        </div>
-
-
 
         <div class="image-container" id="image-container"></div>
         <div class="divider"></div>
@@ -500,163 +396,16 @@
 
 
     <script>
-        const imageFolderPath = '../image/莆田爆款dunk北极狐灰白低帮男女情侣气垫鞋带滑板鞋同款休闲鞋/';
-        const totalImages = 22;
+        const imageFolderPath = '../image/pm纯原李现鹿晗同款学生情侣休闲鞋校园低帮男女板鞋经典百搭运动鞋/';
+        const totalImages = 20;
 
         const productTitle = imageFolderPath.split('/')[2];
         document.getElementById('product-title').innerText = productTitle;
 
-        const imageFolderPath1 = '../image/烂鞋子/'; // 指向包含用户晒单图片的子目录
-
-
-        // 所有可能的用户和评论数据
-        const allReviews = [
-            { username: "鞋神附体", comment: "非常舒服，走路带风，简直完美！" },
-            { username: "买啥啥香", comment: "物超所值，质量好，真的很满意！" },
-            { username: "踩云朵", comment: "这鞋子感觉像踩在云上，太舒服了！" },
-            { username: "有钱真好", comment: "价格合理，穿着舒服，推荐购买！" },
-            { username: "鞋子懂我", comment: "尺码刚好，颜色也好看，真的喜欢！" },
-            { username: "鞋快递员", comment: "快递超快，鞋子也没让我失望，给满分！" },
-            { username: "鞋宝", comment: "这鞋子真的神了，穿上后颜值提升不少！" },
-            { username: "脚感爆棚", comment: "脚感一级棒，日常穿完全没问题。" },
-            { username: "踩着发光", comment: "走路都觉得自己在发光，哈哈，太喜欢了！" },
-            { username: "浅笑安然", comment: "鞋子穿上去很舒服，轻盈柔软，喜欢。" },
-            { username: "微风轻拂", comment: "穿着这鞋走路很轻松，像在微风中散步一样。" },
-            { username: "心若向阳", comment: "颜色很温柔，和图片一致，走路感觉很轻快。" },
-            { username: "云朵下的梦", comment: "鞋底很软，穿起来就像踩在云朵上，非常舒服。" },
-            { username: "一抹清晨", comment: "简单大方，穿起来很舒适，很适合日常。" },
-            { username: "花间漫步", comment: "鞋子特别轻，感觉每一步都轻松自在。" },
-            { username: "晨曦微暖", comment: "这鞋让我每天走路都感觉心情很好，温暖舒适。" },
-            { username: "柔光暖心", comment: "鞋子很贴合脚型，颜色也很柔和，喜欢这种温暖的感觉。" },
-            { username: "静谧时光", comment: "穿上这鞋，走在路上感觉很安逸舒适，毫无疲惫感。" },
-            { username: "月下听风", comment: "轻便好穿，颜色也很优雅，每次出门都想穿这双。" },
-            { username: "脚下生风", comment: "鞋子很轻盈，穿着健身房跑步都很棒！" },
-            { username: "鞋王驾到", comment: "鞋子太棒了，感觉自己就是鞋王！" },
-            { username: "温柔时光", comment: "这鞋子性价比真的高，穿着舒适又时尚，推荐！" },
-            { username: "云淡风轻", comment: "买了这双鞋真的觉得超值，质量好，价格也合适。" },
-            { username: "微光初夏", comment: "这么好的质量，这个价位真心不贵，性价比很高。" },
-            { username: "浅语倾心", comment: "鞋子质量很好，价格也合理，真是物有所值。" },
-            { username: "夏日清风", comment: "这个价格能买到这么好的鞋子，真的觉得赚到了。" },
-            { username: "晨光微暖", comment: "鞋子质量不错，穿着很舒服，价格也很亲民，满意！" },
-            { username: "静守流年", comment: "性价比超高，质量和价格都让人满意，值得购买！" },
-            { username: "月色如水", comment: "价格实惠，鞋子也非常好穿，物超所值。" },
-            { username: "花影摇曳", comment: "鞋子很实惠，穿着轻便舒适，性价比超高。" },
-            { username: "柔情似水", comment: "这么高的性价比，没想到能买到这么好的鞋子！" },
-            { username: "走路不累", comment: "穿了这鞋，走再多路都不累，太爽了！" },
-            { username: "鞋带系得紧", comment: "鞋带很好系，完全不会松，设计不错！" },
-            { username: "鞋底软软", comment: "鞋底特别软，踩着非常舒服，喜欢！" },
-            { username: "一穿就爱上", comment: "一穿上这鞋就不想脱了，太喜欢了！" },
-            { username: "颜值在线", comment: "鞋子的颜值真的很高，朋友都问我在哪里买的！" },
-            { username: "天天走十里", comment: "走十里路都不觉得累，真的推荐！" },
-            { username: "超越光速", comment: "穿上跑步感觉自己快要超越光速了！" },
-            { username: "捡到宝了", comment: "这双鞋简直是捡到宝了，性价比超高！" },
-            { username: "风一样的男子", comment: "穿上这鞋，感觉自己就是风一样的男子！" }
-        ];
-        // 随机选择一条评论并显示
-
-        function displaySingleReview() {
-            const randomReview = allReviews[Math.floor(Math.random() * allReviews.length)];
-            const singleReviewDiv = document.getElementById('singleReview');
-            singleReviewDiv.innerHTML = `<p>${randomReview.username}：${randomReview.comment}</p>`;
-        }
-        // 随机选择7到12条评论
-        function getRandomReviews() {
-            const randomCount = Math.floor(Math.random() * 6) + 7; // 随机生成7到12之间的数字
-            const shuffledReviews = allReviews.sort(() => 0.5 - Math.random()); // 洗牌
-            return shuffledReviews.slice(0, randomCount); // 取前randomCount条
-        }
-        // 获取随机评论并展示
-        function renderReviews() {
-            const randomReviews = getRandomReviews(); // 获取随机评论
-            const defaultReview = randomReviews[0]; // 默认展示第一条评论
-
-            // 显示默认评论
-            const defaultReviewDiv = document.getElementById('default-review');
-            defaultReviewDiv.innerHTML = `<p>${defaultReview.username}：${defaultReview.comment}</p>`;
-
-            // 为默认评论添加随机图片
-            const defaultReviewImagesDiv = document.createElement('div');
-            defaultReviewImagesDiv.className = 'review-images';
-
-            // 随机选择要显示的图片数量
-            const imageCount = Math.floor(Math.random() * 3) + 1; // 随机选择1到3张图片
-            const totalImageInFolder = 19; // 假设子目录下有10张图片
-
-            for (let i = 0; i < imageCount; i++) {
-                const randomImageIndex = Math.floor(Math.random() * totalImageInFolder) + 1; // 随机生成图片索引
-                const img = document.createElement('img');
-                img.src = `${imageFolderPath1}${randomImageIndex}.jpg`; // 构建随机图片路径
-                img.alt = "用户晒单";
-                defaultReviewImagesDiv.appendChild(img);
-            }
-
-            defaultReviewDiv.appendChild(defaultReviewImagesDiv); // 将图片添加到默认评论中
-            // 渲染剩余评论
-            const reviewDropdown = document.getElementById('reviewDropdown');
-            reviewDropdown.innerHTML = ''; // 清空当前评论
-            randomReviews.slice(1).forEach(review => {
-                const reviewDiv = document.createElement('div');
-                reviewDiv.className = 'review';
-                reviewDiv.innerHTML = `<p>${review.username}：${review.comment}</p>`;
-
-                const reviewImagesDiv = document.createElement('div');
-                reviewImagesDiv.className = 'review-images';
-
-                // 随机选择要显示的图片数量
-                const imageCount = Math.floor(Math.random() * 3) + 1; // 随机选择1到3张图片
-                const totalImageInFolder = 20; // 根据实际情况调整总图片数
-
-                for (let i = 0; i < imageCount; i++) {
-                    const randomImageIndex = Math.floor(Math.random() * totalImageInFolder) + 1; // 随机生成图片索引
-                    const img = document.createElement('img');
-                    img.src = `${imageFolderPath1}${randomImageIndex}.jpg`; // 构建随机图片路径
-                    img.alt = "用户晒单";
-                    reviewImagesDiv.appendChild(img);
-                }
-
-                reviewDiv.appendChild(reviewImagesDiv);
-                reviewDropdown.appendChild(reviewDiv);
-            });
-        }
-
-
-
-
-
-        // 修改 window.onload 函数
         window.onload = function () {
             renderImages();
             renderRecommendedImages();
-            renderReviews(); // 渲染评论
         };
-
-
-        function toggleDropdown() {
-            const dropdownContent = document.getElementById("reviewDropdown");
-            const moreButton = document.querySelector('.dropdown-btn'); // 获取“更多评论”按钮
-            const isDisplayed = dropdownContent.style.display === "block";
-
-            if (isDisplayed) {
-                dropdownContent.style.display = "none";
-                moreButton.style.display = "block"; // 显示按钮
-            } else {
-                dropdownContent.style.display = "block";
-                moreButton.style.display = "none"; // 隐藏按钮
-            }
-
-            // 点击其他区域隐藏评论
-            if (!isDisplayed) {
-                document.addEventListener('click', function hideDropdown(event) {
-                    if (!dropdownContent.contains(event.target) && !event.target.classList.contains('dropdown-btn')) {
-                        dropdownContent.style.display = "none";
-                        moreButton.style.display = "block"; // 显示按钮
-                        document.removeEventListener('click', hideDropdown); // 移除事件监听器
-                    }
-                });
-            }
-        }
-
-
 
         function renderImages() {
             const mainImage = document.getElementById('mainImage');
@@ -725,16 +474,16 @@
 
             switch (color) {
                 case 'red':
-                    price = '价格: ¥100';
-                    imageSrc = '../image/烂鞋子/4.jpg'; // 替换为红色图片路径
+                    price = '价格: ¥143';
+                    imageSrc = '../image/pm纯原李现鹿晗同款学生情侣休闲鞋校园低帮男女板鞋经典百搭运动鞋/1.jpg'; // 替换为红色图片路径
                     break;
                 case 'blue':
                     price = '价格: ¥120';
-                    imageSrc = '../image/烂鞋子/9.jpg'; // 替换为蓝色图片路径
+                    imageSrc = '../image/运动女孩徐安安肉丝蜜臀触手可得/5.jpg'; // 替换为蓝色图片路径
                     break;
                 case 'green':
                     price = '价格: ¥110';
-                    imageSrc = '../image/烂鞋子/13.jpg'; // 替换为绿色图片路径
+                    imageSrc = '../image/运动女孩徐安安肉丝蜜臀触手可得/7.jpg'; // 替换为绿色图片路径
                     break;
             }
 
