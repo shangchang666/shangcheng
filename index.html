@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的网站</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#">首页</a></li>
+                <li><a href="#">分类</a></li>
+                <li><a href="#">关于我们</a></li>
+                <li><a href="#">联系</a></li>
+            </ul>
+        </nav>
+        <div class="search-container">
+            <input type="text" placeholder="搜索..." />
+            <button type="submit">搜索</button>
+        </div>
+    </header>
+
+    <div class="announcement-container" id="announcement-container">
+        <div class="announcement" id="announcement">
+            <p>公告1：欢迎访问TX鞋业！</p>
+            <p>公告2：为庆祝公司成立十周年、现回馈新老客户。凭购买订单联系客服可参与抽奖首次必中30元微信现金红包！</p>
+        </div>
+    </div>
+
+    <main>
+        <div class="card-container" id="image-gallery">
+            <!-- 动态生成的卡片将放在这里 -->
+        </div>
+        <div class="pagination" id="pagination">
+            <button id="prev">上一页</button>
+            <button id="next">下一页</button>
+        </div>
+
+    </main>
+
+
+    <footer>
+        <div class="footer-music">
+            <button id="prev-song">上一首</button>
+            <button id="play-pause">播放</button>
+            <button id="next-song">下一首</button>
+        </div>
+        <p>公司名称 | TX有限公司<br>
+            <a href="#">用户协议</a> | <a href="#">隐私政策</a>
+        </p>
+    </footer>
+
+    <script>
+        const imageFolderPath = 'image/封面/';
+        let totalImages = 200; // 总图片数
+        const imagesPerPage = 20; // 每页显示20张图片
+        let currentPage = 1;
+
+        // 获取图片画廊的容器
+        const imageGallery = document.getElementById('image-gallery');
+
+        // 获取分页按钮
+        const prevButton = document.getElementById('prev');
+        const nextButton = document.getElementById('next');
+        console.log(`当前页: ${currentPage}, 总图片数: ${totalImages}`);
+
+        // 获取搜索框和按钮
+        const searchInput = document.querySelector('.search-container input');
+        const searchButton = document.querySelector('.search-container button');
+
+
+        // 初始化每张图片的链接
+        const links = [
+            'xiangqingye/adidas纯原经典三叶草贝壳头胭脂粉校园潮流百搭男女情侣休闲运动滑板鞋.html',
+            'xiangqingye/adidas三叶草金标贝壳头情侣板鞋小白鞋百搭休闲运动鞋男女.html',
+            'xiangqingye/adidas三叶草Astir复古跑步老爹女网男女夏季透气运动鞋情侣休闲鞋.html',
+            'xiangqingye/adidas爆款三叶草海盐蓝男女潮流百搭校园情侣复古低帮休闲运动小白板鞋.html',
+            'xiangqingye/adidas爆款四季贝壳头三叶草百搭男女情侣时尚潮流金标百搭小白滑板鞋aj.html',
+            'xiangqingye/adidas爆款三叶草米兰生胶低帮男女同款时尚情侣百搭潮流运动休闲滑板鞋.html',
+            'xiangqingye/adidas纯原贝壳三叶草百搭男女情侣时尚潮流板鞋标金标百搭小白鞋夏.html',
+            'xiangqingye/adidas2024新款高颜值贝壳头男女鞋蓝白色配色经典舒适低帮耐磨休闲板鞋.html',
+            'xiangqingye/adidas2024纯原贝壳鞋金标三叶草贝壳头板鞋男情侣小白鞋百搭低帮休闲鞋.html',
+            'xiangqingye/adidas2024新款火龙果少女粉面包鞋学生鞋子休闲百搭板鞋透气潮流运动鞋.html',
+            'xiangqingye/adidas纯原三叶草德训GAZE休闲防滑耐磨低帮经典百搭板男女复古情侣.html',
+            'xiangqingye/adidas纯原高品质经典学生三叶草金标贝壳头男女校园板鞋情侣运动鞋平底.html',
+            'xiangqingye/adidas纯原三叶草黑粉标贝壳头二代低帮男女板鞋ins百搭学生休闲运动.html',
+            'xiangqingye/adidas纯原贝壳头三叶草潮流新款经典情侣男女休闲校园百搭运动板鞋.html',
+            'xiangqingye/adidas纯原贝壳头小白鞋少女高颜值板鞋女运动休闲鞋三叶草粉舒适运动鞋.html',
+            'xiangqingye/adidas帆布三叶草新款NEO透气百搭板鞋休闲男女情侣校园运动鞋男鞋.html',
+            'xiangqingye/adidas爆款2024新款Gazelle草莓熊德训高质百搭校园休闲情侣时尚板鞋潮.html',
+            'xiangqingye/adidas爆款纯原三叶草85低帮校园男女同款休闲潮流板鞋运动百搭情侣.html',
+            'xiangqingye/adidas德训复古纯原百搭校园桑巴Samba男女情侣休闲板鞋三叶草.html',
+            'xiangqingye/adidas新款纯原三叶草金标贝壳板鞋校园男女休闲经典小白鞋情侣运动鞋.html',
+            'xiangqingye/adidas纯原爆款三叶草生胶板鞋运动鞋低帮战鞋情侣男女校园百搭潮流休闲.html',
+            'xiangqingye/adidas爆款经典三叶草贝壳头荧光绿潮流男女情侣百搭休闲校园运动滑板鞋.html',
+            'xiangqingye/adidas爆款三叶草休闲NEO透气内增高男女板鞋男鞋情侣百搭校园帆布运动.html',
+            'xiangqingye/adidas情侣三叶草sambarose松糕鞋增高厚底低帮板鞋休闲复古风运动鞋.htmll',
+            'xiangqingye/adidas爆款纯原贝壳头经典女款潮流三叶草板鞋休闲百搭网红运动小白鞋.html',
+            'xiangqingye/adidas阿迪达斯板鞋女士夏三叶草STEPDROP复古休闲透气运动鞋.html',
+            'xiangqingye/adidas纯原贝壳头经典金标花边休闲板鞋三叶草男女情侣小白鞋运动运动鞋.html',
+            'xiangqingye/adidasDIME三叶草联名黑色板鞋贝壳头跑步运动鞋男女休闲情侣百搭小白鞋.html',
+            'xiangqingye/adidas爆款凯蒂猫高颜值休闲耐磨百搭男女同款鞋学生潮流板鞋.html',
+            'xiangqingye/adidas新款三叶草校园厚底情侣男女增高德训复古百搭松糕鞋运动休闲板鞋.html',
+            'xiangqingye/adidas2024新款贝壳头龙年限定三叶草时尚百搭男女情侣运动运动鞋休闲鞋.html',
+            'xiangqingye/adidas纯原新款三叶草经典贝壳百搭休闲板鞋运动鞋男女情侣黑粉色韩版.html',
+            'xiangqingye/adidas新款三叶草男鞋ZX500 RM网面爆米花女鞋Boost情侣运动休闲跑步鞋.html',
+            'xiangqingye/adidas2024年爆款叮当猫贝壳头高颜值低帮情侣学生ins休闲百搭轻便板鞋.html',
+            'xiangqingye/adidas三叶草Forum84Low休闲男女男鞋板鞋情侣运动鞋轻便同款.html',
+            'xiangqingye/adidas三叶草经典复古Campus 00s男女情侣面包鞋网红休闲板鞋百搭潮流鞋.html',
+            'xiangqingye/adidas新款三叶草厚底松糕鞋情侣男女德训增高复古运动休闲板鞋休闲鞋.html',
+            'xiangqingye/adidas千玺新款2024同款男女运动鞋运动网面透气爆米花休闲跑步情侣.html',
+            'xiangqingye/adidas春秋爆米花网面透气鞋子男女学生韩版百搭情侣超轻休闲运动跑步鞋.html',
+            'xiangqingye/adidas纯原三叶草ZX500 联名boost 软底爆米花透气复古男女鞋运动跑步鞋.html',
+            'xiangqingye/NIKEaj男鞋纯原dunksb限定龙年三太子敖丙学生运动板鞋摩擦有声音.html',
+            'xiangqingye/nikeSBChronSLR复古滑板鞋校园王一博同款休闲运动男女鞋子.html',
+            'xiangqingye/nike纯原低帮白蓝红板鞋抽象滑板鞋百搭潮流男女同款休闲运动情侣.html',
+            'xiangqingye/NIKE纯原魔神棕色sb低帮新款鞋带休闲潮流运动鞋板鞋男女气垫aj休闲鞋.html',
+            'xiangqingye/NIKE爆款dunk北极狐低帮sb灰白鞋舌气垫情侣鞋带滑板鞋同款男女.html',
+            'xiangqingye/NIKEDunk NBA布鲁克林篮网 灰白蓝 时尚 男女同款 低帮 百搭 休闲板鞋.html',
+            'xiangqingye/NIKE莆田登月W8黑白跑步鞋飞马winflo8低帮zoom真气垫软底男女运动鞋.html',
+            'xiangqingye/NIKE空军经典ins新款AF1小勾aj低帮男女潮流时尚百搭板鞋运动休闲校园.html',
+            'xiangqingye/NIKE四季爆款GS白黑低帮经典男女情侣百搭复古美式潮流时尚休闲滑板鞋.html',
+            'xiangqingye/NIKE2024夏季新款男鞋登月10代轻便跑步网面软底运动鞋休闲跑步鞋子.html',
+            'xiangqingye/NIKE1纯原AF1空军金钩男鞋灰钩休闲鞋小白鞋ins男女情侣滑板鞋.html',
+            'xiangqingye/NIKE四季爆款1GS白黑低帮经典男女情侣百搭复古美式潮流时尚休闲滑板鞋.html',
+            'xiangqingye/NIKE纯原Dunk双钩帆白绿滑板鞋轻便男女同款减震运动美式软底篮球鞋潮.html',
+            'xiangqingye/NIKE秋季2024爆款dunk涡轮绿小众韩版时尚男女情侣通用新款休闲运动.html',
+            'xiangqingye/NIKEMAX AIR新款2017全掌气垫情侣透气网面男鞋运动男女跑步休闲鞋.html',
+            'xiangqingye/NIKE纯原新款Dunk悟空潮款低帮男女运动鞋情侣板鞋休闲气垫秋款上新【10月6日发完】.html',
+            'xiangqingye/NIKE纯原 AIR MAX 新款低帮休闲男女百搭气垫运动鞋跑步鞋 FZ5048.html',
+            'xiangqingye/NIKE纯原Max90顶极复刻增高气垫运动鞋网面男女百搭休闲跑步鞋潮.html',
+            'xiangqingye/NIKE【首单直降】纯原dunk影子灰厚鞋舌sb低帮带气垫情侣学生百搭板鞋.html',
+            'xiangqingye/NIKE顶级Court Low2黑曜石白蓝红GS空军板鞋学生潮流男女运动休闲板鞋.html',
+            'xiangqingye/NIKE新款dunklow紫白鸳鸯 联名款拼接低帮男女同款潮流休闲运动滑板鞋.html',
+            'xiangqingye/NIKE爆款Dunk海盐蓝低战神滑板鞋学生鞋带百搭男女情侣休闲鞋气垫.html',
+            'xiangqingye/NIKEdunk爆款北极狐灰白OWsb鞋舌低帮气垫鞋带滑板鞋男女情侣款薄款.html',
+            'xiangqingye/NIKEAJ312烟灰复活节纯原篮球鞋a男鞋低帮内增高气垫运动鞋情侣鞋.html',
+            'xiangqingye/NIKE纯原Infinity RUN4马拉松透气竞速休闲跑步男女缓震轻便运动鞋.html',
+            'xiangqingye/NIKE新款SBDunkSup联名款黑白板鞋情侣透气百搭休闲运动鞋男女同款.html',
+            'xiangqingye/NIKEdunksb蓝白赛车运动鞋男女低帮韩版增高鞋ins超火高街高颜值板鞋.html',
+            'xiangqingye/NIKE爆款空军一号AF1复古男女同款休闲经典校园潮流ins百搭平底滑板鞋.html',
+            'xiangqingye/NIKE纯原空军一号AF1联名男女黑白校园休闲情侣运动板鞋百搭运动鞋.html',
+            'xiangqingye/NIKE纯原新款黑神话Dunk悟空男女定制联名休闲情侣板鞋潮流运动鞋.html',
+            'xiangqingye/NIKE新款dunklow紫白鸳鸯联名拼接低帮男女同款潮流休闲滑板鞋.html',
+            'xiangqingye/NIKE纯原Dunk鸽子SBLow低帮灰色百搭和平鸽板鞋男女情侣款运动鞋.html',
+            'xiangqingye/NIKESBDUNKOW联名绿dunk复古休闲板鞋男女同款情侣鞋运动鞋潮流减震.html',
+            'xiangqingye/NIKE纯原dunk紫白鸳鸯联名低帮男女同款潮流休闲时尚百搭运动板鞋.html',
+            'xiangqingye/NIKEaj男鞋联名dunk大友克洋藏马AE86情侣板鞋黑白熊猫鞋低帮女鞋.html',
+            'xiangqingye/NIKE爆款纯原大友克洋dunkSB联名木星百搭低帮情侣运动休闲板鞋男女鞋.html',
+            'xiangqingye/NIKEaj1男鞋联名dunk大友克洋藏马AE86情侣板鞋黑白熊猫鞋低帮女鞋.html',
+            'xiangqingye/NIKE纯原空军一号AF1温变青花瓷变色龙头层牛皮低帮百搭情侣休闲板鞋.html',
+            'xiangqingye/NIKE纯原爆款Dunksb薰衣草校园潮流情侣百搭风休闲时尚男女运动滑板鞋.html',
+            'xiangqingye/NIKE新款Court GS白深粉校园低帮百搭休闲高颜值耐磨防滑情侣运动板鞋.html',
+            'xiangqingye/pm米色五环潮流男女复古面包低帮耐磨百搭情侣休闲运动板鞋.html',
+            'xiangqingye/pm爆款pm浅蓝面包鞋个性耐磨透气低帮男女情侣休闲运动板鞋女款.html',
+            'xiangqingye/pm秘密花园鹿晗爆款李现经典同款运动毛皮Suede休闲男女板鞋.html',
+            'xiangqingye/PM纯原哈蕾娜同款男女情侣款运动鞋韩版校园复古百搭平底休闲板鞋.html',
+            'xiangqingye/鞋垫Puma鞋垫男士彪马板鞋运动减震踩屎感软底舒适吸汗防臭女夏季.html',
+            'xiangqingye/pm龙年爆款纯原复古休闲板鞋PM情侣校园运动鞋男女同款耐磨百搭正版.html',
+            'xiangqingye/PM纯原180 Night面包鞋厚底增高潮流复古情侣运动板鞋396025-01.html',
+            'xiangqingye/pm男鞋秋季2023新款休闲阿甘鞋子男潮流百搭男士运动网红爆款小白鞋.html',
+            'xiangqingye/pm纯原李现鹿晗同款学生情侣休闲鞋校园低帮男女板鞋经典百搭运动鞋.html',
+            'xiangqingye/pm秋冬纯原新款PM德训vibe复古风经典轻便休闲鞋男女低帮情侣爆款.html',
+            'xiangqingye/pm爆款pm白粉多配色休闲耐磨百搭男女同款鞋学生潮流板鞋.html',
+            'xiangqingye/pm纯原蕾哈娜松糕鞋二代板鞋百搭情侣男女增高厚底休闲黑色运动鞋.html',
+            'xiangqingye/爆款pm黑粉小百搭低帮休闲板鞋新款运动学生情侣百搭鞋.html',
+            'xiangqingye/pmSkye网红韩版李现同款男女情侣学生女鞋小白鞋板鞋运动休闲运动鞋.html',
+            'xiangqingye/pm新款赛车鞋Rose朴彩英爆款校园风潮鞋同款PM低帮复古男女休闲鞋子.html',
+            'xiangqingye/pm纯原蕾哈娜二代厚底松糕男女情侣休闲鞋跑步鞋百搭运动鞋潮流板鞋.html',
+            'xiangqingye/PM纯原2024新款男女哈娜运动鞋面包百搭休闲情侣休闲鞋板鞋.html',
+            'xiangqingye/PM二代蕾哈娜厚底松糕鞋潮流男女百搭情侣休闲板鞋运动鞋.html',
+            'xiangqingye/pm纯原新款正版PM德训低帮复古超轻板鞋网红小众男女同款休闲运动鞋.html',
+            'xiangqingye/pm2024新款Rose朴彩英同款PM低帮赛车复古爆款男女休闲板鞋百搭.html',
+
+            'xiangqingye/新款高帮鞋39-47大码男鞋跨境外贸实心底休闲运动（高品质）.html',
+            'xiangqingye/高升新款CC10休闲老爹鞋39-44p55.html',
+            'xiangqingye/网红新款内增高时尚休闲运动阿甘鞋 四季款主推.html',
+            'xiangqingye/高帮莆田男鞋 AJ 空军一号潮鞋 运动鞋.html',
+            'xiangqingye/山鸡女鞋2024.9.10上新马丁靴.html',
+            'xiangqingye/简单 A88 含视频 36-47 时尚缓震跑步鞋运动潮鞋.html',
+            'xiangqingye/90058,新款大码时尚高品质马丁靴男.html',
+            'xiangqingye/【恋尚鞋服-19-8】控69块专利底冬季高帮老爹鞋运动鞋男鞋.html',
+            'xiangqingye/小潮 秋上新爆款夜光鞋面透气老爹鞋爆米花底运动鞋 控价128.html',
+            'xiangqingye/秋季新款 高品质运动老爹鞋.html',
+            'xiangqingye/江上2505大码革面跨境户外徒步登山加绒加厚雪地靴.html',
+            'xiangqingye/（专利款）跨境大码男鞋 潮流男鞋 直播爆款.html',
+            'xiangqingye/13.html',
+            'xiangqingye/14.html',
+            'xiangqingye/15.html',
+            'xiangqingye/16.html',
+            'xiangqingye/17.html',
+            'xiangqingye/18.html',
+            'xiangqingye/19.html',
+            'xiangqingye/20.html',
+            'xiangqingye/夏季透气男鞋子2023新款小白鞋潮流百搭跑步男士休闲运动老爹潮鞋.html',
+            'xiangqingye/2.html',
+            'xiangqingye/3.html',
+            'xiangqingye/4.html',
+            'xiangqingye/5.html',
+
+            'xiangqingye/20.html',
+            // 继续添加链接...
+        ];
+
+        // 假设这是每张图片对应的价格数组
+        const prices = [
+            '¥181 销量：10000+', '¥213 销量：10000+', '¥249 销量：10000+', '¥151 销量：10000+', '¥138 销量：10000+',
+            '¥159 销量：10000+', '¥142 销量：10000+', '¥144 销量：10000+', '¥251 销量：10000+', '¥253 销量：10000+',
+            '¥233 销量：10000+', '¥226 销量：10000+', '¥222 销量：10000+', '¥225 销量：10000+', '¥298 销量：10000+',
+            '¥144 销量：10000+', '¥190 销量：10000+', '¥174 销量：10000+', '¥145 销量：10000+', '¥168 销量：10000+',
+            '¥159 销量：10000+', '¥148 销量：10000+', '¥143 销量：10000+', '¥242 销量：10000+', '¥251 销量：10000+',
+            '¥819 销量：10000+', '¥260 销量：10000+', '¥306 销量：10000+', '¥220 销量：10000+', '¥153 销量：10000+',
+            '¥344 销量：10000+', '¥259 销量：10000+', '¥205 销量：10000+', '¥160 销量：10000+', '¥182 销量：10000+',
+            '¥152 销量：10000+', '¥206 销量：10000+', '¥160 销量：10000+', '¥136 销量：10000+', '¥341 销量：10000+',
+            '¥242 销量：10000+', '¥199 销量：10000+', '¥242 销量：10000+', '¥143 销量：10000+', '¥139 销量：10000+',
+            '¥253 销量：10000+', '¥262 销量：10000+', '¥308 销量：10000+', '¥150 销量：10000+', '¥163 销量：10000+',
+            '¥166 销量：10000+', '¥138 销量：10000+', '¥215 销量：10000+', '¥139 销量：10000+', '¥224 销量：10000+',
+            '¥222 销量：10000+', '¥305 销量：10000+', '¥278 销量：10000+', '¥140 销量：10000+', '¥139 销量：10000+',
+            '¥189 销量：10000+', '¥216 销量：10000+', '¥141 销量：10000+', '¥171 销量：10000+', '¥251 销量：10000+',
+            '¥215 销量：10000+', '¥140 销量：10000+', '¥154 销量：10000+', '¥188 销量：10000+', '¥198 销量：10000+',
+            '¥178 销量：10000+', '¥232 销量：10000+', '¥235 销量：10000+', '¥180 销量：10000+', '¥261 销量：10000+',
+            '¥172 销量：10000+', '¥261 销量：10000+', '¥297 销量：10000+', '¥145 销量：10000+', '¥145 销量：10000+',
+            '¥164 销量：10000+', '¥180 销量：10000+', '¥159 销量：10000+', '¥355 销量：10000+', '¥54 销量：10000+',
+            '¥243 销量：10000+', '¥284 销量：10000+', '¥161 销量：10000+', '¥143 销量：10000+', '¥169 销量：10000+',
+            '¥237 销量：10000+', '¥223 销量：10000+', '¥244 销量：10000+', '¥215 销量：10000+', '¥329 销量：10000+',
+            '¥242 销量：10000+', '¥340 销量：10000+', '¥193 销量：10000+', '¥276 销量：10000+', '¥257 销量：10000+',
+            // 确保价格数组与链接数组一致
+        ];
+
+
+
+
+
+
+        function updateButtons() {
+            prevButton.disabled = currentPage === 1;
+            nextButton.disabled = currentPage * imagesPerPage >= totalImages;
+        }
+
+        prevButton.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                loadImages();
+                updateButtons();
+            }
+        });
+
+        nextButton.addEventListener('click', () => {
+            if (currentPage * imagesPerPage < totalImages) {
+                currentPage++;
+                loadImages();
+                updateButtons();
+            }
+        });
+
+
+
+        function filterImages() {
+            const searchTerm = searchInput.value.toLowerCase(); // 获取搜索词并转为小写
+            currentPage = 1; // 重置到第一页
+
+            // 过滤出符合搜索词的图片标题
+            const filteredIndexes = links.map((link, index) => {
+                const title = link.replace('xiangqingye/', '').replace('.html', '').toLowerCase();
+                return title.includes(searchTerm) ? index : -1;
+            }).filter(index => index !== -1);
+
+            // 根据过滤后的索引，获取对应的链接和价格
+            const filteredLinks = filteredIndexes.map(index => links[index]);
+            const filteredPrices = filteredIndexes.map(index => prices[index]);
+
+            // 更新总图片数为过滤后的数量
+            totalImages = filteredLinks.length;
+
+            // 加载符合条件的图片
+            loadImages(filteredLinks, filteredPrices);
+            updateButtons();
+        }
+
+        function loadImages(filteredLinks = links, filteredPrices = prices) {
+            imageGallery.innerHTML = ''; // 清空图片容器
+
+            const startIndex = (currentPage - 1) * imagesPerPage;
+            const endIndex = Math.min(startIndex + imagesPerPage, filteredLinks.length);
+
+            for (let i = startIndex; i < endIndex; i++) {
+                const card = document.createElement('div');
+                card.classList.add('card');
+
+                const img = document.createElement('img');
+                img.src = `${imageFolderPath}${i + 1}.jpeg`; // 根据图片路径
+
+                const title = filteredLinks[i].replace('xiangqingye/', '').replace('.html', '');
+                const titleElement = document.createElement('h3');
+                titleElement.textContent = title;
+
+                const priceElement = document.createElement('p');
+                priceElement.textContent = filteredPrices[i];
+
+                card.addEventListener('click', () => {
+                    window.location.href = filteredLinks[i];
+                });
+
+                card.appendChild(img);
+                card.appendChild(titleElement);
+                card.appendChild(priceElement);
+                imageGallery.appendChild(card);
+            }
+        }
+
+
+
+        const announcementContainer = document.getElementById('announcement-container');
+        const announcement = document.getElementById('announcement');
+
+        // 动态生成公告内容并设置不同速度
+        const announcements = [
+            { text: "公告1：欢迎访问TX鞋业！", speed: 20 },
+
+            { text: "公告2：为庆祝公司成立十周年、现回馈新老客户。凭购买订单联系客服可参与抽奖首次必中30元微信现金红包！", speed: 25 },
+            { text: "公告3：感谢您的支持与信任！", speed: 30 }
+        ];
+
+        announcement.innerHTML = announcements.map(a => `<p>${a.text}</p>`).join('');
+
+        let totalHeight = announcement.scrollHeight; // 获取总高度
+        announcement.style.animationDuration = `${totalHeight / 5}s`; // 根据内容高度设置动画时长
+
+        // 重新计算动画时长，确保速度适应
+        function updateScrollSpeed() {
+            const speedFactor = Math.random() * 10 + 5; // 随机生成速度因子
+            announcement.style.animationDuration = `${totalHeight / speedFactor}s`;
+        }
+
+        // 设置每隔一段时间重新计算速度
+        setInterval(updateScrollSpeed, 110000);
+
+
+        // 绑定搜索框事件
+        searchInput.addEventListener('input', filterImages);
+
+        loadImages();
+        updateButtons();
+
+        // 音乐模块控制
+        const songs = [
+            'yinyue/015d_035e_010b_67de87e71b44c5fd0fd46af0bbf8e00e.mp3',
+            'yinyue/obj_wo3DlMOGwrbDjj7DisKw_7896511646_017b_2f0d_9cb4_95644dbaf1d7c5037c1fe0ebb099ba7e.mp3',
+            'yinyue/obj_wo3DlMOGwrbDjj7DisKw_13957606465_5f77_6fc2_30dc_f7b87880d01fe0c66b4f25878bbd5df5.mp3',
+
+            'yinyue/obj_wo3DlMOGwrbDjj7DisKw_15101518007_63f1_f753_be5e_2b7cb66243c25536846e56e307c13813.mp3',
+            'yinyue/obj_wo3DlMOGwrbDjj7DisKw_30001737540_ee26_692f_2edd_a1112d0b0c828e88e1157a7aa6f775ed.mp3',
+            'yinyue/obj_wo3DlMOGwrbDjj7DisKw_33489452813_8fea_3f51_7f2c_2182b6057e431155bcfaa8ecf0ae80e9.mp3',
+
+            'yinyue/obj_wo3DlMOGwrbDjj7DisKw_34967874931_00a8_3009_febb_2109ac9b67c244bcb34a11d74c19a44d.mp3',
+            'yinyue/obj_wo3DlMOGwrbDjj7DisKw_35642704157_626f_197b_c7aa_5dc3558b5f97eb34a91828570b6d7d0e.mp3',
+            'yinyue/obj_wo3DlMOGwrbDjj7DisKw_43994540329_0aa6_6844_d384_767e4781a620e00074d4d9a5da31da57.mp3',
+
+            'yinyue/obj_wo3DlMOGwrbDjj7DisKw_45495346114_cf9a_e574_c46e_5463bb36c1b3b8d3196101d1f92a199c.mp3',
+            'yinyue/obj_wo3DlMOGwrbDjj7DisKw_43994540329_0aa6_6844_d384_767e4781a620e00074d4d9a5da31da57.mp3',
+        ];
+
+
+
+        let currentSongIndex = 0;
+        const audio = new Audio(songs[currentSongIndex]);
+        const playPauseButton = document.getElementById('play-pause');
+
+        // 音乐控制功能
+        playPauseButton.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                playPauseButton.textContent = '暂停';
+            } else {
+                audio.pause();
+                playPauseButton.textContent = '播放';
+            }
+        });
+
+        document.getElementById('prev-song').addEventListener('click', () => {
+            currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+            audio.src = songs[currentSongIndex];
+            audio.play();
+            playPauseButton.textContent = '暂停';
+        });
+
+        document.getElementById('next-song').addEventListener('click', () => {
+            currentSongIndex = (currentSongIndex + 1) % songs.length;
+            audio.src = songs[currentSongIndex];
+            audio.play();
+            playPauseButton.textContent = '暂停';
+        });
+        playPauseButton.addEventListener('click', togglePlayPause);
+        prevSongButton.addEventListener('click', playPrevSong);
+        nextSongButton.addEventListener('click', playNextSong);
+
+        // 初始化加载图片
+        loadImages();
+        updateButtons();
+    </script>
+</body>
+
+</html>
