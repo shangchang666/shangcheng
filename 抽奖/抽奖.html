@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>抽奖页面</title>
+    <style>
+        html.body {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
+            width: 100%;
+            overflow-x: hidden;
+            /* 防止水平滚动 */
+        }
+
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        .my-lucky-parent {
+            width: 100vw;
+            min-height: 100vh;
+            display: flex;
+            padding: 100px 0 0 0;
+            align-items: center;
+            flex-direction: column;
+            background: #569fe8;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .input {
+            appearance: none;
+            outline: 0;
+            padding: 0 8px;
+            height: 30px;
+            margin-top: 30px;
+            border: none;
+            border-radius: 5px;
+            background: #F2CA46;
+        }
+
+        .result {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .result-value {
+            color: red;
+            font-weight: 700;
+            font-size: 30px;
+        }
+
+        .time {
+            color: yellow;
+        }
+
+        .scrolling-list {
+            /* position: absolute;
+            bottom: 0; */
+            width: 100%;
+            height: 100px;
+            overflow: hidden;
+        }
+
+        .list {
+            position: relative;
+            transition: transform 0.1s;
+            /* Smooth transition for the list movement */
+        }
+
+        .scrolling-list {
+            width: 100%;
+            height: 200px;
+            /* 适合五行内容的高度 */
+            overflow-y: auto;
+            /* 添加垂直滚动条 */
+        }
+
+        .list-item {
+            height: 40px;
+            /* 每个列表项的高度 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+
+        body {
+            overflow-x: hidden;
+            /* 防止水平滚动 */
+        }
+
+        .content {
+
+            margin: 10px 0;
+            color: rgb(243, 13, 13);
+            width: 100%;
+            /* 确保内容区宽度适合屏幕 */
+            text-align: center;
+            font-size: 16px;
+            /* 可以根据需要调整 */
+            line-height: 1.5;
+            padding: 10px;
+            overflow-wrap: break-word;
+            /* 允许换行 */
+            word-break: break-all;
+            /* 强制换行 */
+        }
+
+
+        img {
+            /* 假设有图片的情况下 */
+            max-width: 100%;
+            /* 确保图片不会超出其容器 */
+            height: auto;
+            /* 高度自动调整 */
+        }
+
+        @media (max-width: 480px) {
+            .content {
+                font-size: 14px;
+                /* 在小屏幕下减小字体大小 */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="my-lucky-parent">
+        <div id="result" class="result">
+            <div id="resultValue" class="result-value"></div>
+            <div id="resultTime" class="time"></div>
+        </div>
+        <div id="my-lucky"></div>
+        <div>
+            <input class="input" id="keyInput" placeholder="请先输入密钥再抽奖" type="text">
+        </div>
+        <div class="content">
+            <div></div>
+            <div>1.10元投放奖池100000个中奖概率为80%</div>
+            <div>2.30元投放奖池80000个中奖概率为60%</div>
+            <div>3.50元投放奖池50000个中奖概率为50%</div>
+            <div>4.100元投放奖池30000个中奖概率为35%</div>
+            <div>5.500元投放奖池10000个中奖概率为25%</div>
+            <div>6.1千元投放奖池8000个中奖概率为18%</div>
+            <div>7.5千元投放奖池5000个中奖概率为10%</div>
+            <div>8.1万元投放奖池1000个中奖概率为1%</div>
+            <div>中奖后凭中奖截图联系客服进行微信红包兑换</div>
+            <div>最终解释权归TX鞋业公司所有，此活动仅凭购买<br>订单找客服领取抽奖码参与抽奖</div>
+        </div>
+        <!-- 添加滚动列表 -->
+        <div class="scrolling-list">
+            <div class="list" id="list">
+                <!-- 初始内容区域 -->
+
+            </div>
+        </div>
+    </div>
+
+    <script src="./lucy-canvas.js"></script>
+    <script>
+        const prizeImg = {
+            src: './红包.png',
+            width: '40%',
+            top: '40%'
+        };
+
+        const usedKeys = JSON.parse(localStorage.getItem('usedKeys')) || [];
+        const prizes = ['红包1千元', '红包500元', '红包30元', '红包5千元', '红包50元', '红包10元'];
+
+        const myLucky = new LuckyCanvas.LuckyWheel('#my-lucky', {
+            width: '300px',
+            height: '300px',
+            blocks: [{
+                padding: '14px',
+                imgs: [{
+                    src: './bg.png',
+                    width: '100%',
+                    height: '100%'
+                }]
+            }],
+            prizes: [
+                { background: '#F5862D', fonts: [{ text: '红包5元', top: '10%', fontSize: '17', fontColor: '#aaa' }], imgs: [prizeImg] },
+                { background: '#B22E14', fonts: [{ text: '红包10元', top: '10%', fontSize: '17', fontColor: '#F2CA46' }], imgs: [prizeImg] },
+                { background: '#F2CA46', fonts: [{ text: '谢谢参与', top: '10%', fontSize: '17', fontColor: '#aaa' }], imgs: [prizeImg] },
+                { background: '#B22E14', fonts: [{ text: '红包30元', top: '10%', fontSize: '17', fontColor: '#F2CA46' }], imgs: [prizeImg] },
+                { background: '#F2CA46', fonts: [{ text: '谢谢参与', top: '10%', fontSize: '17', fontColor: '#aaa' }], imgs: [prizeImg] },
+                { background: '#B22E14', fonts: [{ text: '红包20元', top: '10%', fontSize: '17', fontColor: '#F2CA46' }], imgs: [prizeImg] },
+                { background: '#F2CA46', fonts: [{ text: '谢谢参与', top: '10%', fontSize: '17', fontColor: '#aaa' }], imgs: [prizeImg] },
+                { background: '#B22E14', fonts: [{ text: '红包10元', top: '10%', fontSize: '17', fontColor: '#F2CA46' }], imgs: [prizeImg] },
+                { background: '#F2CA46', fonts: [{ text: '谢谢参与', top: '10%', fontSize: '17', fontColor: '#aaa' }], imgs: [prizeImg] },
+            ],
+            buttons: [
+                { radius: '30%', background: '#869cfa', pointer: true },
+                { radius: '25%', background: '#752D2D', pointer: true },
+                { radius: '30%', imgs: [{ src: './btn1.png', width: '100%', top: '-100%' }], fonts: [{ text: '开始\n抽奖', top: '-20px' }] }
+            ],
+            start: function () {
+                startLottery();
+            },
+            end: function (prize) {
+                const result = prize.fonts[0].text;
+                const timestamp = new Date().toLocaleString('zh-CN', { hour12: false });
+                document.getElementById('result').style.display = 'flex';
+                document.getElementById('resultValue').innerText = `${result}`;
+                document.getElementById('resultTime').innerText = `抽奖时间: ${timestamp}`;
+            }
+        });
+
+        function base64Decode(base64) {
+            try {
+                return atob(base64);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function startLottery() {
+            const keyInput = document.getElementById('keyInput').value;
+            const decodedValue = base64Decode(keyInput);
+
+            // 检查解密后的值是否为八位数
+            if (!decodedValue || !/^\d{8}$/.test(decodedValue)) {
+                alert('无效的密钥');
+                return;
+            }
+
+            // 取最后一位数字作为抽奖的值
+            const lotteryIndex = parseInt(decodedValue[decodedValue.length - 1]) % prizes.length;
+
+            if (usedKeys.includes(keyInput)) {
+                alert('该密钥已经使用过');
+                return;
+            }
+
+            myLucky.play();
+            setTimeout(() => {
+                myLucky.stop(lotteryIndex);
+                usedKeys.push(keyInput);
+                localStorage.setItem('usedKeys', JSON.stringify(usedKeys));
+            }, 3000);
+        }
+
+        // 滚动
+        function generateRandomPhone() {
+            const phone = '1' + Math.floor(Math.random() * 900000000 + 100000000);
+            return phone.replace(/(\d{3})(\d{4})(\d+)/, '$1****$3');
+        }
+
+        function addNewWinner() {
+            const randomPrize = prizes[Math.floor(Math.random() * prizes.length)];
+            const phone = generateRandomPhone();
+            const message = `刚刚：${phone}用户抽中 ${randomPrize}`;
+            const list = document.getElementById('list');
+            const newItem = document.createElement('div');
+            newItem.className = 'list-item';
+            newItem.innerText = message;
+
+            // Add the new item and check the list's length
+            list.appendChild(newItem);
+
+            // If there are more than 5 items, remove the oldest
+            if (list.children.length > 5) {
+                list.removeChild(list.firstChild);
+            }
+        }
+        // Initialize with 5 random messages
+        for (let i = 0; i < 5; i++) {
+            addNewWinner();
+        }
+
+        // Add a new winner every second
+        setInterval(addNewWinner, 1000);
+    </script>
+</body>
+
+</html>
