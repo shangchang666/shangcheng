@@ -236,7 +236,7 @@
             }
 
             // 取最后一位数字作为抽奖的值
-            const lotteryIndex = parseInt(decodedValue[decodedValue.length - 1]) % prizes.length;
+            const lotteryIndex = decodedValue.slice(7, 8);
 
             if (usedKeys.includes(keyInput)) {
                 alert('该密钥已经使用过');
