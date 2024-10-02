@@ -245,7 +245,7 @@
 
             myLucky.play();
             setTimeout(() => {
-                myLucky.stop(lotteryIndex);
+                myLucky.stop(Number(lotteryIndex));
                 usedKeys.push(keyInput);
                 localStorage.setItem('usedKeys', JSON.stringify(usedKeys));
             }, 3000);
